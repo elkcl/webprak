@@ -1,4 +1,4 @@
-package ru.elkcl.webprak.webprak
+package ru.elkcl.webprak
 
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer

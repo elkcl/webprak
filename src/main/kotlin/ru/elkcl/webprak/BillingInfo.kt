@@ -1,4 +1,4 @@
-package ru.elkcl.webprak.entities.billinginfo
+package ru.elkcl.webprak
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -15,4 +15,21 @@ import java.io.Serializable
 )
 sealed interface BaseBillingInfo : Serializable {
     fun getType(): String
+}
+
+class OneoffBillingInfo(
+    val amount: Int
+) : BaseBillingInfo {
+    override fun getType(): String {
+        return "oneoff"
+    }
+}
+
+class MonthlyBillingInfo(
+    val initial: Int,
+    val recurring: Int,
+) : BaseBillingInfo {
+    override fun getType(): String {
+        return "monthly"
+    }
 }

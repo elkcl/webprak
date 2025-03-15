@@ -1,8 +1,9 @@
-package ru.elkcl.webprak.entities.clientinfo
+package ru.elkcl.webprak
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import java.io.Serializable
+import java.time.LocalDate
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -15,4 +16,23 @@ import java.io.Serializable
 )
 sealed interface BaseClientInfo : Serializable {
     fun getType(): String
+}
+
+class IndividualClientInfo(
+    val passportNumber: String,
+    val passportIssueDate: LocalDate,
+) : BaseClientInfo {
+    override fun getType(): String {
+        return "individual"
+    }
+}
+
+class LegalEntityClientInfo(
+    val registryNumber: String,
+    val taxpayerNumber: String,
+    val address: String,
+) : BaseClientInfo {
+    override fun getType(): String {
+        return "legal_entity"
+    }
 }

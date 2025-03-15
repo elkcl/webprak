@@ -1,4 +1,4 @@
-package ru.elkcl.webprak.webprak
+package ru.elkcl.webprak
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
