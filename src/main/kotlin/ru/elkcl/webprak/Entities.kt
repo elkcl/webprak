@@ -8,12 +8,11 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @MappedSuperclass
-abstract class BaseEntity<T> {
-
+abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    var id: T? = null
+    var id: Long? = null
 
     override fun equals(other: Any?): Boolean {
         other ?: return false
@@ -22,7 +21,7 @@ abstract class BaseEntity<T> {
 
         if (javaClass != ProxyUtils.getUserClass(other)) return false
 
-        other as BaseEntity<*>
+        other as BaseEntity
 
         return this.id != null && this.id == other.id
     }
@@ -35,31 +34,8 @@ abstract class BaseEntity<T> {
 }
 
 @Entity
-class BillingType(
-    val name: String,
-) : BaseEntity<Long>()
-
-@Entity
-class ClientType(
-    val name: String,
-) : BaseEntity<Long>()
-
-@Entity
-class OperationType(
-    val name: String,
-) : BaseEntity<Long>()
-
-@Entity
-class ServiceType(
-    val name: String,
-) : BaseEntity<Long>()
-
-@Entity
 class Client(
     val name: String,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    val clientType: ClientType,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
@@ -68,7 +44,7 @@ class Client(
     val balance: Int,
     val creditLimit: Int,
     val creditDue: LocalDate,
-) : BaseEntity<Long>()
+) : BaseEntity()
 
 @Entity
 class Contact(
@@ -85,14 +61,14 @@ class Contact(
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
     val other: Map<String, String>?,
-) : BaseEntity<Long>()
+) : BaseEntity()
 
 @Entity
 class Operation(
     @ManyToOne(fetch = FetchType.LAZY)
     val client: Client,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
     val operationType: OperationType,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -103,7 +79,7 @@ class Operation(
 
     @Column(columnDefinition = "text")
     val description: String?,
-) : BaseEntity<Long>()
+) : BaseEntity()
 
 @Entity
 class Service(
@@ -112,13 +88,10 @@ class Service(
     @Column(columnDefinition = "text")
     val description: String,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
     val serviceType: ServiceType,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    val billingType: BillingType,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
     val billingInfo: BaseBillingInfo,
-) : BaseEntity<Long>()
+) : BaseEntity()

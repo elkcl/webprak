@@ -5,31 +5,31 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import java.io.Serializable
 
 @JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
+    use = JsonTypeInfo.Id.CLASS,
     include = JsonTypeInfo.As.PROPERTY,
     property = "type"
 )
 @JsonSubTypes(
-    JsonSubTypes.Type(value = OneoffBillingInfo::class, name = "oneoff"),
-    JsonSubTypes.Type(value = MonthlyBillingInfo::class, name = "monthly")
+    JsonSubTypes.Type(value = OneoffBillingInfo::class),
+    JsonSubTypes.Type(value = MonthlyBillingInfo::class)
 )
-sealed interface BaseBillingInfo : Serializable {
-    fun getType(): String
-}
+sealed interface BaseBillingInfo : Serializable
 
 class OneoffBillingInfo(
     val amount: Int
-) : BaseBillingInfo {
-    override fun getType(): String {
-        return "oneoff"
-    }
-}
+) : BaseBillingInfo
 
 class MonthlyBillingInfo(
     val initial: Int,
     val recurring: Int,
-) : BaseBillingInfo {
-    override fun getType(): String {
-        return "monthly"
-    }
+) : BaseBillingInfo
+
+enum class BillingType : Serializable {
+    ONEOFF,
+    MONTHLY
+}
+
+fun billingInfo(billingType: BillingType) = when (billingType) {
+    BillingType.ONEOFF -> OneoffBillingInfo::class
+    BillingType.MONTHLY -> MonthlyBillingInfo::class
 }
