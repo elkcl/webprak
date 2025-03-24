@@ -26,7 +26,7 @@ abstract class BaseEntity {
         return this.id != null && this.id == other.id
     }
 
-    override fun hashCode() = 25
+    override fun hashCode() = javaClass.hashCode()
 
     override fun toString(): String {
         return "${this.javaClass.simpleName}(id=$id)"
@@ -35,63 +35,68 @@ abstract class BaseEntity {
 
 @Entity
 class Client(
-    val name: String,
-
+    var name: String,
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
-    val clientInfo: BaseClientInfo,
-
-    val balance: Int,
-    val creditLimit: Int,
-    val creditDue: LocalDate,
+    var clientInfo: BaseClientInfo,
+    @OneToMany(fetch = FetchType.LAZY)
+    var contacts: MutableSet<Contact> = mutableSetOf(),
+    var creditLimit: Int = 0,
+    var creditDue: LocalDate = LocalDate.of(1980, 1, 1),
+    var balance: Int = 0,
 ) : BaseEntity()
 
 @Entity
 class Contact(
-    @ManyToOne(fetch = FetchType.LAZY)
-    val client: Client,
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    var client: Client,
 
-    val familyName: String,
-    val givenName: String,
-    val patronymic: String?,
-    val email: String?,
-    val phone: String?,
-    val address: String?,
+    var familyName: String,
+    var givenName: String,
+    var patronymic: String? = null,
+    var email: String? = null,
+    var phone: String? = null,
+    var address: String? = null,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
-    val other: Map<String, String>?,
+    var other: Map<String, String>? = null,
 ) : BaseEntity()
 
 @Entity
 class Operation(
     @ManyToOne(fetch = FetchType.LAZY)
-    val client: Client,
+    var client: Client,
 
     @Enumerated(EnumType.STRING)
-    val operationType: OperationType,
+    var operationType: OperationType,
+
+    var timestamp: LocalDateTime,
+    var amount: Int,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    val service: Service?,
-
-    val timestamp: LocalDateTime,
-    val amount: Int,
+    var service: Service? = null,
 
     @Column(columnDefinition = "text")
-    val description: String?,
-) : BaseEntity()
+    var description: String? = null,
+) : BaseEntity() {
+    @PostPersist
+    fun updateClient() {
+        client.balance += amount
+    }
+}
 
 @Entity
 class Service(
-    val name: String,
+    var name: String,
 
     @Column(columnDefinition = "text")
-    val description: String,
+    var description: String,
 
     @Enumerated(EnumType.STRING)
-    val serviceType: ServiceType,
+    var serviceType: ServiceType,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
-    val billingInfo: BaseBillingInfo,
+    var billingInfo: BaseBillingInfo,
 ) : BaseEntity()

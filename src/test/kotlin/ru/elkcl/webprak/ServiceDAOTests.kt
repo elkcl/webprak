@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
@@ -186,6 +188,8 @@ class ServiceDAOTests @Autowired constructor(
             serviceBillingTypeIs(BillingType.ONEOFF)
                 .and(serviceOneoffAmountMin(60))
                 .and(serviceOneoffAmountMax(80))
+
+
         )
         assertThat(found).hasSameElementsAs(listOf(serviceInternet2))
     }
@@ -272,5 +276,81 @@ class ServiceDAOTests @Autowired constructor(
                 .and(serviceMonthlyRecurringMax(110))
         )
         assertThat(found).hasSameElementsAs(listOf(serviceSMS1))
+    }
+
+    @Test
+    fun `When filter by initial Monthly payment range and sort by name and paginate then return Page(Service)`() {
+        val serviceInternet1 = Service(
+            "Турбо-кнопка",
+            "Дополнительный пакет интернета 10 ГБ. Сгорает через один месяц.",
+            ServiceType.INTERNET,
+            OneoffBillingInfo(100)
+        )
+        entityManager.persist(serviceInternet1)
+        entityManager.flush()
+
+        val serviceCalls1 = Service(
+            "На телефоне",
+            "100 мин на звонки каждый месяц",
+            ServiceType.CALLS,
+            MonthlyBillingInfo(100, 120)
+        )
+        entityManager.persist(serviceCalls1)
+        entityManager.flush()
+
+        val serviceSMS1 = Service(
+            "Телеграфист",
+            "100 SMS каждый месяц",
+            ServiceType.SMS,
+            MonthlyBillingInfo(70, 90)
+        )
+        entityManager.persist(serviceSMS1)
+        entityManager.flush()
+
+        val serviceInternet2 = Service(
+            "SOS-кнопка",
+            "Дополнительный пакет интернета 5 ГБ. Сгорает через один месяц.",
+            ServiceType.INTERNET,
+            OneoffBillingInfo(70)
+        )
+        entityManager.persist(serviceInternet2)
+        entityManager.flush()
+
+        val serviceInternetMonthly1 = Service(
+            "Интернетик",
+            "3 ГБ ежемесячно",
+            ServiceType.INTERNET,
+            MonthlyBillingInfo(50, 70)
+        )
+        entityManager.persist(serviceInternetMonthly1)
+        entityManager.flush()
+
+        val serviceInternetMonthly2 = Service(
+            "Интернетище",
+            "10 ГБ ежемесячно",
+            ServiceType.INTERNET,
+            MonthlyBillingInfo(120, 150)
+        )
+        entityManager.persist(serviceInternetMonthly2)
+        entityManager.flush()
+
+        val serviceCalls2 = Service(
+            "Колл-центр",
+            "300 мин на звонки каждый месяц",
+            ServiceType.CALLS,
+            MonthlyBillingInfo(200, 250)
+        )
+        entityManager.persist(serviceCalls2)
+        entityManager.flush()
+
+        val found = serviceDAO.findAll(
+            serviceBillingTypeIs(BillingType.MONTHLY)
+                .and(serviceMonthlyInitialMin(70))
+                .and(serviceMonthlyRecurringMax(300)),
+            PageRequest.of(1, 2, Sort.by("name"))
+        )
+        assertEquals(found.toList(), listOf(serviceCalls1, serviceSMS1))
+        assertEquals(found.totalPages, 2)
+        assertEquals(found.totalElements, 4)
     }
 }
