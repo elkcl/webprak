@@ -1,0 +1,33 @@
+{{> header}}
+<div class="container">
+    <h1>{{title}}</h1>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Клиент</th>
+                    <th scope="col">Тип операции</th>
+                    <th scope="col">Услуга</th>
+                    <th scope="col">Описание</th>
+                    <th scope="col">Время</th>
+                    <th scope="col">Δ Баланса</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#operations}}
+                    <tr>
+                        <th scope="row">{{id}}</th>
+                        <td>{{client}}</td>
+                        <td>{{opType}}</td>
+                        <td>{{service}}</td>
+                        <td>{{description}}</td>
+                        <td>{{timestamp}}</td>
+                        <td>{{amount}}</td>
+                    </tr>
+                {{/operations}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{> footer}}
