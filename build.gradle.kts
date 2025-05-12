@@ -44,6 +44,7 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("org.testcontainers:postgresql")
 	testImplementation("org.testcontainers:junit-jupiter")
+	testImplementation("org.seleniumhq.selenium:selenium-java")
 }
 
 kotlin {

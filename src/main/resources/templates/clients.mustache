@@ -1,0 +1,181 @@
+{{> header}}
+<div class="container">
+    <h1>{{title}}</h1>
+    <div class="mb-3 mt-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#adderModal">Зарегистрировать клиента</button>
+    </div>
+
+    <div class="modal fade" id="adderModal" tabindex="-1" aria-labelledby="adderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="/clients/add">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="adderModalLabel">Новый клиент</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="name_query_add" name="name"
+                                   placeholder="" required>
+                            <label for="name_query_add" class="form-label">Имя/Название</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="type_add" name="type" required>
+                                <option selected></option>
+                                <option value="INDIVIDUAL">Физ. лицо</option>
+                                <option value="LEGAL_ENTITY">Юр. лицо</option>
+                            </select>
+                            <label for="type_add" class="form-label">Тип клиента</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="passport_num_add" name="passport_num"
+                                   placeholder="">
+                            <label for="passport_num_add" class="form-label">Номер паспорта (физ. лица)</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="passport_iss_add" name="passport_iss"
+                                   placeholder="">
+                            <label for="passport_iss_add" class="form-label">Дата выдачи паспорта (физ. лица)</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="registry_add" name="registry"
+                                   placeholder="">
+                            <label for="registry_add" class="form-label">ОГРН (юр. лица)</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="taxpayer_add" name="taxpayer"
+                                   placeholder="">
+                            <label for="taxpayer_add" class="form-label">ИНН (юр. лица)</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="address_add" name="address"
+                                   placeholder="">
+                            <label for="address_add" class="form-label">Адрес (юр. лица)</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="limit_add" name="limit"
+                                   placeholder="">
+                            <label for="limit_add" class="form-label">Кредитный лимит</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="due_add" name="due"
+                                   placeholder="">
+                            <label for="due_add" class="form-label">Срок погашения кредита</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <h3>Фильтры</h3>
+        <form method="get">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name_query_inp" name="name_query" placeholder="">
+                <label for="name_query_inp" class="form-label">Поиск по названию</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="contact_query_inp" name="contact_query" placeholder="">
+                <label for="contact_query_inp" class="form-label">Поиск по описанию</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="type_inp" name="type">
+                    <option selected></option>
+                    <option value="INDIVIDUAL">Физ. лицо</option>
+                    <option value="LEGAL_ENTITY">Юр. лицо</option>
+                </select>
+                <label for="type_inp" class="form-label">Тип клиента</label>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="time_min_inp" name="time_min" placeholder="">
+                        <label for="time_min_inp" class="form-label">Время услуг с</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="time_max_inp" name="time_max" placeholder="">
+                        <label for="time_max_inp" class="form-label">Время услуг по</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="balance_min_inp" name="balance_min" placeholder="">
+                        <label for="balance_min_inp" class="form-label">Мин. баланс</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="balance_max_inp" name="balance_max" placeholder="">
+                        <label for="balance_max_inp" class="form-label">Макс. баланс</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="limit_min_inp" name="limit_min" placeholder="">
+                        <label for="limit_min_inp" class="form-label">Мин. кредитный лимит</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="limit_max_inp" name="limit_max" placeholder="">
+                        <label for="limit_max_inp" class="form-label">Макс. кредитный лимит</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="due_min_inp" name="due_min" placeholder="">
+                        <label for="due_min_inp" class="form-label">Срок погашения с</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="due_max_inp" name="due_max" placeholder="">
+                        <label for="due_max_inp" class="form-label">Срок погашения по</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Фильтровать</button>
+        </form>
+    </div>
+    <h3>Результат</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Имя/Название</th>
+                <th scope="col">Идент. информация</th>
+                <th scope="col">Кредитный лимит</th>
+                <th scope="col">Срок погашения</th>
+                <th scope="col">Баланс</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#clients}}
+                <tr>
+                    <th scope="row"><a href="/clients/{{id}}">{{id}}</a></th>
+                    <td>{{name}}</td>
+                    <td>{{clientInfo}}</td>
+                    <td>{{creditLimit}}</td>
+                    <td>{{creditDue}}</td>
+                    <td>{{balance}}</td>
+                </tr>
+            {{/clients}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{> footer}}

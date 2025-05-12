@@ -1,0 +1,128 @@
+{{> header}}
+<div class="container">
+    <h1>{{title}}</h1>
+    <div class="mb-3 mt-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#adderModal">
+            Зарегистрировать услугу
+        </button>
+    </div>
+
+    <div class="modal fade" id="adderModal" tabindex="-1" aria-labelledby="adderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <form method="post" action="/services/add">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="adderModalLabel">Новая услуга</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="name_query_add" name="name"
+                                   placeholder="" required>
+                            <label for="name_query_add" class="form-label">Название</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="desc_query_add" name="description"
+                                   placeholder="" required>
+                            <label for="desc_query_add" class="form-label">Описание</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="type_add" name="service_type" required>
+                                <option selected></option>
+                                <option value="CALLS">Звонки</option>
+                                <option value="SMS">СМС</option>
+                                <option value="INTERNET">Интернет</option>
+                            </select>
+                            <label for="type_add" class="form-label">Тип услуги</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="billing_type_add" name="billing_type" required>
+                                <option selected></option>
+                                <option value="ONEOFF">Единоразовый</option>
+                                <option value="MONTHLY">Ежемесячный</option>
+                            </select>
+                            <label for="billing_type_add" class="form-label">Тип биллинга</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="oneoff_add" name="oneoff"
+                                   placeholder="">
+                            <label for="oneoff_add" class="form-label">Стоимость (единоразовый биллинг)</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="initial_add" name="initial"
+                                   placeholder="">
+                            <label for="initial_add" class="form-label">Первый платёж (ежемесячный биллинг)</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="recurring_add" name="recurring"
+                                   placeholder="">
+                            <label for="recurring_add" class="form-label">Повторный платёж (ежемесячный биллинг)</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <h3>Фильтры</h3>
+        <form method="get">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name_query_inp" name="name_query" placeholder="">
+                <label for="name_query_inp" class="form-label">Поиск по названию</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="desc_query_inp" name="desc_query" placeholder="">
+                <label for="desc_query_inp" class="form-label">Поиск по описанию</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="type_inp" name="service_type">
+                    <option selected></option>
+                    <option value="CALLS">Звонки</option>
+                    <option value="SMS">СМС</option>
+                    <option value="INTERNET">Интернет</option>
+                </select>
+                <label for="type_inp" class="form-label">Тип операции</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="billing_type_inp" name="billing_type">
+                    <option selected></option>
+                    <option value="ONEOFF">Единоразовый</option>
+                    <option value="MONTHLY">Ежемесячный</option>
+                </select>
+                <label for="billing_type_inp" class="form-label">Тип биллинга</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Фильтровать</button>
+        </form>
+    </div>
+    <h3>Результат</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Название</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Тип операции</th>
+                <th scope="col">Биллинг</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#services}}
+                <tr>
+                    <th scope="row"><a href="/services/{{id}}">{{id}}</a></th>
+                    <td>{{name}}</td>
+                    <td>{{description}}</td>
+                    <td>{{serviceType}}</td>
+                    <td>{{billingInfo}}</td>
+                </tr>
+            {{/services}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{> footer}}

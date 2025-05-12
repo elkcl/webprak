@@ -18,17 +18,29 @@ sealed interface BaseClientInfo : Serializable
 class IndividualClientInfo(
     val passportNumber: String,
     val passportIssueDate: LocalDate,
-) : BaseClientInfo
+) : BaseClientInfo {
+    override fun toString(): String {
+        return "паспорт №$passportNumber, выдан $passportIssueDate"
+    }
+}
 
 class LegalEntityClientInfo(
     val registryNumber: String,
     val taxpayerNumber: String,
     val address: String,
-) : BaseClientInfo
+) : BaseClientInfo {
+    override fun toString(): String {
+        return "ОГРН: $registryNumber; ИНН: $taxpayerNumber, адрес: $address"
+    }
+}
 
-enum class ClientType : Serializable {
-    INDIVIDUAL,
-    LEGAL_ENTITY,
+enum class ClientType(val desc: String) : Serializable {
+    INDIVIDUAL("Физ. лицо"),
+    LEGAL_ENTITY("Юр. лицо");
+
+    override fun toString(): String {
+        return desc
+    }
 }
 
 fun clientInfo(clientType: ClientType) = when (clientType) {

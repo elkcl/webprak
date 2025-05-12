@@ -1,0 +1,80 @@
+{{> header}}
+<div class="container">
+    <h1>{{title}}</h1>
+
+    <div class="mt-5">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Удалить услугу
+        </button>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="/services/{{id}}/delete">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление услуги</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <p>Вы уверены, что хотите удалить услугу #{{id}}?</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5 mt-5">
+        <form method="post" action="/services/{{id}}/edit">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name_query_add" name="name"
+                       placeholder="" value="{{name}}" required>
+                <label for="name_query_add" class="form-label">Название</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="desc_query_add" name="description"
+                       placeholder="" value="{{description}}" required>
+                <label for="desc_query_add" class="form-label">Описание</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="type_add" name="service_type" required>
+                    <option value="CALLS" {{#serviceType}}CALLS{{/serviceType}}>Звонки</option>
+                    <option value="SMS" {{#serviceType}}SMS{{/serviceType}}>СМС</option>
+                    <option value="INTERNET" {{#serviceType}}INTERNET{{/serviceType}}>Интернет</option>
+                </select>
+                <label for="type_add" class="form-label">Тип услуги</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="billing_type_add" name="billing_type" required>
+                    <option selected></option>
+                    <option value="ONEOFF" {{#billingType}}ONEOFF{{/billingType}}>Единоразовый</option>
+                    <option value="MONTHLY" {{#billingType}}MONTHLY{{/billingType}}>Ежемесячный</option>
+                </select>
+                <label for="billing_type_add" class="form-label">Тип биллинга</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="oneoff_add" name="oneoff"
+                       placeholder="" value="{{oneoff}}">
+                <label for="oneoff_add" class="form-label">Стоимость (единоразовый биллинг)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="initial_add" name="initial"
+                       placeholder="" value="{{initial}}">
+                <label for="initial_add" class="form-label">Первый платёж (ежемесячный биллинг)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="recurring_add" name="recurring"
+                       placeholder="" value="{{recurring}}">
+                <label for="recurring_add" class="form-label">Повторный платёж (ежемесячный биллинг)</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </form>
+    </div>
+</div>
+{{> footer}}

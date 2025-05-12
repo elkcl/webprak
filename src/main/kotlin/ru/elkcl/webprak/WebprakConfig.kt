@@ -21,6 +21,7 @@ class WebprakConfig {
     @Bean
     fun databaseInitializer(
         clientDAO: ClientDAO,
+        contactDAO: ContactDAO,
         serviceDAO: ServiceDAO,
         operationDAO: OperationDAO
     ) = ApplicationRunner {
@@ -48,6 +49,8 @@ class WebprakConfig {
         )
         serviceDAO.save(serviceSMS1)
 
+        serviceDAO.flush()
+
         val client1 = Client(
             "Вася",
             IndividualClientInfo(
@@ -56,6 +59,50 @@ class WebprakConfig {
             )
         )
         clientDAO.save(client1)
+
+        val client2 = Client(
+            "Петя Рубчинский",
+            IndividualClientInfo(
+                "133789",
+                LocalDate.of(2023, 3, 12)
+            ),
+            mutableSetOf(),
+            35,
+            LocalDate.of(2025, 10, 12)
+        )
+        clientDAO.save(client2)
+
+        val contact1 = Contact(
+            "Максбетов",
+            "Макс",
+            "Васильевич",
+            null,
+            "+78005553535"
+        )
+        contactDAO.save(contact1)
+
+        val client3 = Client(
+            "ООО Рога и Копыта",
+            LegalEntityClientInfo("42069", "333333", "Плутон"),
+            mutableSetOf(contact1),
+            1000,
+            LocalDate.of(2025, 2, 10)
+        )
+        clientDAO.save(client3)
+
+        val client4 = Client(
+            "Альберт Эйнштейн",
+            IndividualClientInfo(
+                "99999",
+                LocalDate.of(2024, 5, 24),
+            ),
+            mutableSetOf(),
+            115,
+            LocalDate.of(2026, 3, 11)
+        )
+        clientDAO.save(client4)
+
+        clientDAO.flush()
 
         val deposit1 = Operation(
             client1,
@@ -66,9 +113,10 @@ class WebprakConfig {
             "Пополнение через СБП"
         )
         operationDAO.save(deposit1)
+        clientDAO.save(client1)
 
         val deposit2 = Operation(
-            client1,
+            client2,
             OperationType.DEPOSIT,
             LocalDateTime.of(2025, 4, 2, 1, 2, 3),
             150,
@@ -76,6 +124,7 @@ class WebprakConfig {
             "Пополнение через автомат"
         )
         operationDAO.save(deposit2)
+        clientDAO.save(client2)
 
         val withdraw1 = Operation(
             client1,
@@ -86,7 +135,7 @@ class WebprakConfig {
         operationDAO.save(withdraw1)
 
         val chargeInternet1 = Operation(
-            client1,
+            client2,
             OperationType.CHARGE,
             LocalDateTime.of(2025, 5, 8, 1, 2, 3),
             -70,
@@ -94,8 +143,7 @@ class WebprakConfig {
         )
         operationDAO.save(chargeInternet1)
 
-//        serviceDAO.flush()
-//        clientDAO.flush()
-//        operationDAO.flush()
+        operationDAO.flush()
+        clientDAO.flush()
     }
 }

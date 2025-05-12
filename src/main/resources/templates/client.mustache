@@ -1,0 +1,91 @@
+{{> header}}
+<div class="container">
+    <h1>{{title}}</h1>
+
+    <div class="mt-5">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Удалить клиента
+        </button>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="/clients/{{id}}/delete">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление клиента</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <p>Вы уверены, что хотите удалить клиента #{{id}}?</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5 mt-5">
+        <form method="post" action="/clients/{{id}}/edit">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name_query_add" name="name"
+                       placeholder="" value="{{name}}" required>
+                <label for="name_query_add" class="form-label">Название</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="type_add" name="type" required>
+                    <option value="INDIVIDUAL" {{#clientType}}INDIVIDUAL{{/clientType}}>Физ. лицо</option>
+                    <option value="LEGAL_ENTITY" {{#clientType}}LEGAL_ENTITY{{/clientType}}>Юр. лицо</option>
+                </select>
+                <label for="type_add" class="form-label">Тип услуги</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="passport_num_add" name="passport_num"
+                       placeholder="" value="{{passport_num}}">
+                <label for="passport_num_add" class="form-label">Номер паспорта (физ. лица)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="passport_iss_add" name="passport_iss"
+                       placeholder="" value="{{passport_iss}}">
+                <label for="passport_iss_add" class="form-label">Дата выдачи паспорта (физ. лица)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="registry_add" name="registry"
+                       placeholder="" value="{{registry}}">
+                <label for="registry_add" class="form-label">ОГРН (юр. лица)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="taxpayer_add" name="taxpayer"
+                       placeholder="" value="{{taxpayer}}">
+                <label for="taxpayer_add" class="form-label">ИНН (юр. лица)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="address_add" name="address"
+                       placeholder="" value="{{address}}">
+                <label for="address_add" class="form-label">Адрес (юр. лица)</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="limit_add" name="limit"
+                       placeholder="" value="{{limit}}">
+                <label for="limit_add" class="form-label">Кредитный лимит</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="due_add" name="due"
+                       placeholder="" value="{{due}}">
+                <label for="due_add" class="form-label">Срок погашения кредита</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="balance_add" name="balance"
+                       placeholder="" value="{{balance}}" disabled>
+                <label for="balance_add" class="form-label">Баланс</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </form>
+    </div>
+</div>
+{{> footer}}

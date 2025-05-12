@@ -17,16 +17,28 @@ sealed interface BaseBillingInfo : Serializable
 
 class OneoffBillingInfo(
     val amount: Int
-) : BaseBillingInfo
+) : BaseBillingInfo {
+    override fun toString(): String {
+        return "$amount руб. единоразово"
+    }
+}
 
 class MonthlyBillingInfo(
     val initial: Int,
     val recurring: Int,
-) : BaseBillingInfo
+) : BaseBillingInfo {
+    override fun toString(): String {
+        return "$initial руб. подключение, $recurring руб./мес"
+    }
+}
 
-enum class BillingType : Serializable {
-    ONEOFF,
-    MONTHLY
+enum class BillingType(val desc: String) : Serializable {
+    ONEOFF("Единоразовый"),
+    MONTHLY("Ежемесячный");
+
+    override fun toString(): String {
+        return desc
+    }
 }
 
 fun billingInfo(billingType: BillingType) = when (billingType) {

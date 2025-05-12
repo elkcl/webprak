@@ -1,31 +1,149 @@
 {{> header}}
 <div class="container">
     <h1>{{title}}</h1>
+    <div class="mb-3 mt-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#adderModal">
+            Зарегистрировать операцию
+        </button>
+    </div>
+
+    <div class="modal fade" id="adderModal" tabindex="-1" aria-labelledby="adderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <form method="post" action="/operations/add">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="adderModalLabel">Новая операция</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="client_id_add" name="client_id" placeholder=""
+                                   required>
+                            <label for="client_id_add" class="form-label">ID клиента</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="service_id_add" name="service_id"
+                                   placeholder="">
+                            <label for="service_id_add" class="form-label">ID сервиса</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="desc_query_add" name="description"
+                                   placeholder="">
+                            <label for="desc_query_add" class="form-label">Описание</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="type_add" name="type" required>
+                                <option selected></option>
+                                <option value="DEPOSIT">Пополнение</option>
+                                <option value="WITHDRAW">Снятие</option>
+                                <option value="CHARGE">Оплата</option>
+                            </select>
+                            <label for="type_add" class="form-label">Тип операции</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="amount_min_add" name="amount"
+                                   placeholder="" required>
+                            <label for="amount_min_add" class="form-label">Сумма</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <h3>Фильтры</h3>
+        <form method="get">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="client_id_inp" name="client_id" placeholder="">
+                <label for="client_id_inp" class="form-label">ID клиента</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="client_query_id" name="client_query" placeholder="">
+                <label for="client_query_id" class="form-label">Поиск по клиентам</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="service_id_inp" name="service_id" placeholder="">
+                <label for="service_id_inp" class="form-label">ID сервиса</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="service_query_inp" name="service_query" placeholder="">
+                <label for="service_query_inp" class="form-label">Поиск по услугам</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="desc_query_inp" name="desc_query" placeholder="">
+                <label for="desc_query_inp" class="form-label">Поиск по описанию</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="type_inp" name="type">
+                    <option selected></option>
+                    <option value="DEPOSIT">Пополнение</option>
+                    <option value="WITHDRAW">Снятие</option>
+                    <option value="CHARGE">Оплата</option>
+                </select>
+                <label for="type_inp" class="form-label">Тип операции</label>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="time_min_inp" name="time_min" placeholder="">
+                        <label for="time_min_inp" class="form-label">Время с</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="time_max_inp" name="time_max" placeholder="">
+                        <label for="time_max_inp" class="form-label">Время по</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="amount_min_inp" name="amount_min" placeholder="">
+                        <label for="amount_min_inp" class="form-label">Мин. сумма</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="amount_max_inp" name="amount_max" placeholder="">
+                        <label for="amount_max_inp" class="form-label">Макс. сумма</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Фильтровать</button>
+        </form>
+    </div>
+    <h3>Результат</h3>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Клиент</th>
-                    <th scope="col">Тип операции</th>
-                    <th scope="col">Услуга</th>
-                    <th scope="col">Описание</th>
-                    <th scope="col">Время</th>
-                    <th scope="col">Δ Баланса</th>
-                </tr>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Клиент</th>
+                <th scope="col">Тип операции</th>
+                <th scope="col">Услуга</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Время</th>
+                <th scope="col">Сумма</th>
+            </tr>
             </thead>
             <tbody>
-                {{#operations}}
-                    <tr>
-                        <th scope="row">{{id}}</th>
-                        <td>{{client}}</td>
-                        <td>{{opType}}</td>
-                        <td>{{service}}</td>
-                        <td>{{description}}</td>
-                        <td>{{timestamp}}</td>
-                        <td>{{amount}}</td>
-                    </tr>
-                {{/operations}}
+            {{#operations}}
+                <tr>
+                    <th scope="row">{{id}}</th>
+                    <td>{{client}}</td>
+                    <td>{{opType}}</td>
+                    <td>{{service}}</td>
+                    <td>{{description}}</td>
+                    <td>{{timestamp}}</td>
+                    <td>{{amount}}</td>
+                </tr>
+            {{/operations}}
             </tbody>
         </table>
     </div>

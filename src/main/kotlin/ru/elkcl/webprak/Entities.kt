@@ -42,7 +42,7 @@ class Client(
     @OneToMany(fetch = FetchType.LAZY)
     var contacts: MutableSet<Contact> = mutableSetOf(),
     var creditLimit: Int = 0,
-    var creditDue: LocalDate = LocalDate.of(1980, 1, 1),
+    var creditDue: LocalDate? = null,
     var balance: Int = 0,
 ) : BaseEntity()
 

@@ -10,6 +10,12 @@ fun clientNameContains(clientName: String): Specification<Client> {
     }
 }
 
+fun clientIdIsIn(ids: List<Long>): Specification<Client> {
+    return Specification<Client> { root, _, builder ->
+        root.get(Client_.id).`in`(ids)
+    }
+}
+
 fun clientContactInfoContains(query: String): Specification<Client> {
     return Specification<Client> { root, _, builder ->
         val withContacts = root.join(Client_.contacts)
