@@ -60,7 +60,7 @@ class HtmlController(
                 ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "service_id must be a Long")))
         }
         if (!clientQuery.isNullOrEmpty()) {
-            spec = spec.and(operationClientSatisfies(clientNameContains(clientQuery).or(clientContactInfoContains(clientQuery))))
+            spec = spec.and(operationClientSatisfies(clientNameContains(clientQuery)).or(operationClientSatisfies(clientContactInfoContains(clientQuery))))
         }
         if (!serviceQuery.isNullOrEmpty()) {
             spec = spec.and(operationServiceSatisfies(serviceNameContains(serviceQuery).or(serviceDescriptionContains(serviceQuery))))
@@ -144,9 +144,9 @@ class HtmlController(
     data class RenderedOperation(
         val id: String,
         val client: String,
+        val opType: String,
         val service: String,
         val description: String,
-        val opType: String,
         val timestamp: String,
         val amount: String,
     )
@@ -154,9 +154,9 @@ class HtmlController(
     fun Operation.render() = RenderedOperation(
         id.toString(),
         "[${client.id.toString()}] ${client.name}",
+        operationType.toString(),
         if (service != null) "[${service!!.id.toString()}] ${service!!.name}" else "—",
         description ?: "—",
-        operationType.toString(),
         timestamp.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
         abs(amount).toString(),
     )
@@ -581,7 +581,7 @@ class HtmlController(
         name,
         clientInfo.toString(),
         creditLimit.toString(),
-        creditDue?.format(DateTimeFormatter.ISO_LOCAL_DATE) ?: "-",
+        creditDue?.format(DateTimeFormatter.ISO_LOCAL_DATE) ?: "—",
         balance.toString(),
     )
 }
